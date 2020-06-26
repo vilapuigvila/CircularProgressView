@@ -7,112 +7,145 @@
 //
 
 import UIKit
+import HGCircularSlider
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var emojiView: UIView!
     
-    var p0 : CGPoint!
-    var p1 : CGPoint!
-    var p2 : CGPoint!
-    var emojiCenter: CGPoint!
+    @IBOutlet weak var thumbView: UIView!
+    
+    lazy var p0 : CGPoint = CGPoint.pointOnCircle(center: view.center, radius: radius, angle: Double(startAngle))
+    lazy var currentThumbPos: CGPoint = p0
+    
+    var thumbRect: CGRect!
     
     var bezierPath = UIBezierPath()
-    var bezierPathYMax: CGFloat!
+    var bezierOriginY: CGFloat!
+    
+    // alf
+    let radius = CGFloat(150)
+    let startAngle = -CGFloat(225).toRadians()
+    let endAngle = CGFloat(45).toRadians()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         drawBezierPath()
+
         let dragPan = UIPanGestureRecognizer(target: self, action: #selector(dragEmotionOnBezier(recognizer:)))
-        view.addGestureRecognizer(dragPan)
+        thumbView.addGestureRecognizer(dragPan)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        //set the emojiView center at randon point on Bezier path. Setting the starting point here
-        emojiView.center = p0
-        //store the initial position of emoji
-        emojiCenter = p0
+        thumbView.center = p0
+        updateEmojiRect()
+    }
+    
+    func updateEmojiRect() {
+        thumbRect = thumbView.frame
+        thumbRect.size = CGSize(width: thumbRect.width * 3, height: thumbRect.height * 3)
     }
 
- 
-    /*
-     Draw Bezier Quad curve and get the path.
-     */
     func drawBezierPath() {
-        
-        let maxLeftPoint = emojiView.center
-        p0 = CGPoint(x: view.center.x + 30, y: view.center.y - 200)
-        
-        p2  = CGPoint(x: view.center.x + 30, y: view.center.y + 200)
-        
-        p1 = CGPoint(x: halfPoint1D(p0: p0.x, p2: p2.x, control: maxLeftPoint.x),
-                        y: halfPoint1D(p0: p0.y, p2: p2.y, control: maxLeftPoint.y))
-        
-        
-        bezierPath.move(to: p0)
-        bezierPath.addQuadCurve(to: p2, controlPoint: p1)
-        
+        bezierPath = UIBezierPath(arcCenter: view.center,
+                                  radius: radius,
+                                  startAngle: startAngle,
+                                  endAngle: endAngle,
+                                  clockwise: true)
+    
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = bezierPath.cgPath
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = UIColor.green.cgColor
         shapeLayer.lineWidth = 3.0
         view.layer.addSublayer(shapeLayer)
-        emojiView.translatesAutoresizingMaskIntoConstraints = false
+        thumbView.translatesAutoresizingMaskIntoConstraints = false
         
-        //Store the max Y distance covered by UIbezierPath. It will be useful to calculate the intermidiate point on curve
-        // at the distance y from the start point po
-        bezierPathYMax = p2.y - p0.y
-        
+        bezierOriginY = CGPoint.pointOnCircle(center: view.center, radius: radius, angle: -Double(90).toRadians()).y
     }
-    
-    
-    func halfPoint1D(p0: CGFloat, p2: CGFloat, control: CGFloat) -> CGFloat {
-        return 2 * control - p0 / 2 - p2 / 2
-    }
-    
-    
-    /* Refered from http://ericasadun.com/2013/03/25/calculating-bezier-points/
-     - params: start point, end point, control point and the time drawn factor between 0 to 1.
-    */
-    func getPointAtPercent(t: Float, start: Float, c1: Float, end: Float ) -> Float {
-        let t_: Float = (1.0 - t)
-        let tt_: Float = t_ * t_
-        let tt: Float = t * t
-        
-        return start * tt_
-            + 2.0 * c1 * t_ * t
-            + end * tt
-    }
-    
     
     @objc func dragEmotionOnBezier(recognizer: UIPanGestureRecognizer) {
-        
         let point = recognizer.location(in: view)
-        let distanceY = point.y - emojiCenter.y
-        // get the value between 0 & 1. 0 represents and po and 1 represent p2.
-        var distanceYInRange = distanceY / bezierPathYMax
-        distanceYInRange = distanceYInRange > 0 ? distanceYInRange : -distanceYInRange
+
+        let touchSide = positionTouch(xCoordinate: point.x)
         
-        if distanceYInRange >= 1 || distanceYInRange <= 0 {
-            // already at the end of the curve. So need to drag
+        let angle = getAngle(start: view.center, end: point)
+        if angle == 45 && touchSide == .left || angle == -225 && touchSide == .right {
             return
         }
         
-        // get the x,y point on the Bezier path at a distance distanceYInRange from p.
-        let newY = getPointAtPercent(t: Float(distanceYInRange), start: Float(p0.y) , c1: Float(p1.y), end: Float(p2.y))
-        
-        let newX = getPointAtPercent(t: Float(distanceYInRange), start: Float(p0.x) , c1: Float(p1.x), end: Float(p2.x))
-        
-        // set the newLocation of the emojiview
-        emojiView.center = CGPoint(x: CGFloat(newX), y: CGFloat(newY))
-        
-        
+        let newPos = CGPoint.pointOnCircle(center: view.center, radius: radius, angle: angle.toRadians())
+        thumbView.center = newPos
     }
-}
+    
+    enum Side {
+        case left, center, right
+    }
+    
+    func positionTouch(xCoordinate: CGFloat) -> Side {
+        if xCoordinate < view.center.x {
+            return .left
+        } else if xCoordinate > view.center.x {
+            return .right
+        } else {
+            return .center
+        }
+    }
+    
+    func getAngle(start: CGPoint, end: CGPoint) -> Double {
+        let dx = end.x - start.x
+        let dy = end.y - start.y
+        let abs_dy = abs(dy)
 
-extension CGFloat {
-    func toRadians() -> CGFloat {
-        return self * CGFloat(Double.pi) / 180.0
+        let constraint = Double.pi / 4
+        var radians = Double(atan(abs_dy / dx))
+        
+        let quarter = TouchInCircle(dx: dx, dy: dy)
+        if quarter.isInDownSide {
+            radians = min(constraint, max(-constraint, radians))
+        }
+        
+        let addition: Double = dx < 0 ? 180 : 0
+        let degrees = (radians * 360 / (2.0 * Double.pi)) + addition
+        
+        let normalized: Double = {
+            switch quarter {
+            case .rightDown:
+                return degrees
+            case .leftDown:
+                let diff = 180 - degrees
+                return (180 + diff) * -1
+            case .rightUp, .leftUp, .equals:
+                return degrees * -1
+            }
+        }()
+        return Double(normalized)
+    }
+    
+    enum TouchInCircle {
+        case rightUp
+        case rightDown
+        case leftUp
+        case leftDown
+        case equals
+        
+        init(dx: CGFloat, dy: CGFloat) {
+            if dy > 0 && dx > 0 {
+                self = .rightDown
+            } else if dy > 0 && dx < 0 {
+                self = .leftDown
+            } else if dy < 0 && dx > 0 {
+                self = .rightUp
+            } else if dy < 0 && dx < 0 {
+                self = .leftUp
+            } else {
+                self = .equals
+            }
+        }
+        
+        var isInDownSide: Bool {
+            switch self {
+            case .rightDown, .leftDown: return true
+            default: return false
+            }
+        }
     }
 }

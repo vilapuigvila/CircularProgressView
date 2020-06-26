@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "HGCircularSlider",
+        "repositoryURL": "https://github.com/HamzaGhazouani/HGCircularSlider.git",
+        "state": {
+          "branch": null,
+          "revision": "2b98462d32bf7211851aa73537dbaba5dd80229e",
+          "version": "2.2.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
