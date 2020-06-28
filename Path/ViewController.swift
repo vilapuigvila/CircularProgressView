@@ -7,52 +7,69 @@
 //
 
 import UIKit
-import HGCircularSlider
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var thumbView: UIView!
+    typealias StartEndArc = (start: CGPoint, end: CGPoint)
     
-    lazy var p0 : CGPoint = CGPoint.pointOnCircle(center: view.center, radius: radius, angle: Double(startAngle))
-    lazy var currentThumbPos: CGPoint = p0
+    @IBOutlet weak var thumbView: UIView!
+    var thumbLayer = UIView()
+    
+    lazy var arcPosition: StartEndArc = {
+        return (CGPoint.pointOnCircle(center: view.center, radius: radius, angle: Double(startAngle)),
+                CGPoint.pointOnCircle(center: view.center, radius: radius, angle: Double(endAngle)))
+    }()
     
     var thumbRect: CGRect!
     
-    var bezierPath = UIBezierPath()
+    var arcPath = UIBezierPath()
     var bezierOriginY: CGFloat!
     
-    // alf
+    let leftRange: ClosedRange = -225.0...(-180.0)
+    let rightRange: ClosedRange = -180.0...45.0
+    
     let radius = CGFloat(150)
     let startAngle = -CGFloat(225).toRadians()
     let endAngle = CGFloat(45).toRadians()
     
+    
+    // MARK: - Helper's -
+    let circular = CircularProgressView(frame: .zero)
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        drawBezierPath()
+//        drawBezierPath()
 
-        let dragPan = UIPanGestureRecognizer(target: self, action: #selector(dragEmotionOnBezier(recognizer:)))
-        thumbView.addGestureRecognizer(dragPan)
+//        let dragPan = UIPanGestureRecognizer(target: self, action: #selector(dragEmotionOnBezier(recognizer:)))
+//        thumbView.addGestureRecognizer(dragPan)
+//        let cir = CircularProgressView(frame: view.frame)
+        view.addSubview(circular)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        thumbView.center = p0
-        updateEmojiRect()
+//        thumbView.center = arcPosition.start
+//        updateEmojiRect()
+        circular.frame = CGRect(x: 0, y: 0, width: view.frame.width * 0.75, height: view.frame.width * 0.75)
+        circular.center = view.center
+        circular.setNeedsDisplay()
+        circular.delegate = self
     }
     
     func updateEmojiRect() {
         thumbRect = thumbView.frame
-        thumbRect.size = CGSize(width: thumbRect.width * 3, height: thumbRect.height * 3)
+        thumbRect.size = CGSize(width: thumbRect.width * 2, height: thumbRect.height * 2)
     }
 
     func drawBezierPath() {
-        bezierPath = UIBezierPath(arcCenter: view.center,
+        arcPath = UIBezierPath(arcCenter: view.center,
                                   radius: radius,
                                   startAngle: startAngle,
                                   endAngle: endAngle,
                                   clockwise: true)
     
         let shapeLayer = CAShapeLayer()
-        shapeLayer.path = bezierPath.cgPath
+        shapeLayer.path = arcPath.cgPath
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = UIColor.green.cgColor
         shapeLayer.lineWidth = 3.0
@@ -65,13 +82,10 @@ class ViewController: UIViewController {
     @objc func dragEmotionOnBezier(recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: view)
 
-        let touchSide = positionTouch(xCoordinate: point.x)
-        
-        let angle = getAngle(start: view.center, end: point)
-        if angle == 45 && touchSide == .left || angle == -225 && touchSide == .right {
+        guard let angle = getAngle(start: view.center, end: point) else {
             return
         }
-        
+        updateEmojiRect()
         let newPos = CGPoint.pointOnCircle(center: view.center, radius: radius, angle: angle.toRadians())
         thumbView.center = newPos
     }
@@ -90,7 +104,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func getAngle(start: CGPoint, end: CGPoint) -> Double {
+    func getAngle(start: CGPoint, end: CGPoint) -> Double? {
         let dx = end.x - start.x
         let dy = end.y - start.y
         let abs_dy = abs(dy)
@@ -117,6 +131,11 @@ class ViewController: UIViewController {
                 return degrees * -1
             }
         }()
+        
+        if rightRange.contains(normalized) && quarter != .leftDown && thumbView!.center == arcPosition.start ||
+        leftRange.contains(normalized) && quarter != .rightDown && thumbView!.center == arcPosition.end {
+            return nil
+        }
         return Double(normalized)
     }
     
@@ -147,5 +166,11 @@ class ViewController: UIViewController {
             default: return false
             }
         }
+    }
+}
+
+extension ViewController: CircularProgressViewDelegate {
+    func circularProgressView(_ view: CircularProgressView, thumbValue: Double) {
+        print("ddfdfd: \(thumbValue)")
     }
 }

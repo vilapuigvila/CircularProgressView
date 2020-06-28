@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1t-rl-dIl">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1t-rl-dIl">
                                 <rect key="frame" x="301" y="418" width="60" height="60"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon" translatesAutoresizingMaskIntoConstraints="NO" id="YUm-Zi-m1m">
@@ -35,32 +35,10 @@
                                     <constraint firstItem="YUm-Zi-m1m" firstAttribute="leading" secondItem="z1t-rl-dIl" secondAttribute="leading" id="u8k-bB-E6Z"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pcT-bd-ZWz" userLabel="circular">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kc1-xb-8ad">
-                                        <rect key="frame" x="31" y="272" width="352" height="352"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="Kc1-xb-8ad" secondAttribute="height" multiplier="1:1" id="0T1-jz-A6w"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="Kc1-xb-8ad" firstAttribute="centerX" secondItem="pcT-bd-ZWz" secondAttribute="centerX" id="632-46-KGV"/>
-                                    <constraint firstItem="Kc1-xb-8ad" firstAttribute="centerY" secondItem="pcT-bd-ZWz" secondAttribute="centerY" id="VbI-gu-D2z"/>
-                                    <constraint firstItem="Kc1-xb-8ad" firstAttribute="width" secondItem="pcT-bd-ZWz" secondAttribute="width" multiplier="0.85" id="gyG-Pq-F6t"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="pcT-bd-ZWz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="167-Eg-tro"/>
-                            <constraint firstItem="pcT-bd-ZWz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="H2n-Pa-vTF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="z1t-rl-dIl" secondAttribute="trailing" constant="33" id="KGY-wz-bem"/>
-                            <constraint firstAttribute="bottom" secondItem="pcT-bd-ZWz" secondAttribute="bottom" id="Qtg-VS-37i"/>
-                            <constraint firstAttribute="trailing" secondItem="pcT-bd-ZWz" secondAttribute="trailing" id="ctM-9f-t8A"/>
                             <constraint firstItem="z1t-rl-dIl" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="sC0-nb-6Kh"/>
                         </constraints>
                     </view>

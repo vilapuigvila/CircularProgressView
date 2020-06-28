@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		508597EC24A5F4DC00717FE0 /* HGCircularSlider in Frameworks */ = {isa = PBXBuildFile; productRef = 508597EB24A5F4DC00717FE0 /* HGCircularSlider */; };
 		508597EE24A605FB00717FE0 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508597ED24A605FB00717FE0 /* Helpers.swift */; };
 		508E4C7224A49A4A00566122 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E4C7124A49A4A00566122 /* AppDelegate.swift */; };
 		508E4C7424A49A4A00566122 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E4C7324A49A4A00566122 /* SceneDelegate.swift */; };
@@ -15,6 +14,7 @@
 		508E4C7924A49A4A00566122 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508E4C7724A49A4A00566122 /* Main.storyboard */; };
 		508E4C7B24A49A4C00566122 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508E4C7A24A49A4C00566122 /* Assets.xcassets */; };
 		508E4C7E24A49A4C00566122 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508E4C7C24A49A4C00566122 /* LaunchScreen.storyboard */; };
+		50BD667E24A7420800E1EC88 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BD667D24A7420800E1EC88 /* CircularProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +27,7 @@
 		508E4C7A24A49A4C00566122 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508E4C7D24A49A4C00566122 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		508E4C7F24A49A4C00566122 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50BD667D24A7420800E1EC88 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,7 +35,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				508597EC24A5F4DC00717FE0 /* HGCircularSlider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +63,7 @@
 				508E4C7124A49A4A00566122 /* AppDelegate.swift */,
 				508E4C7324A49A4A00566122 /* SceneDelegate.swift */,
 				508E4C7524A49A4A00566122 /* ViewController.swift */,
+				50BD667D24A7420800E1EC88 /* CircularProgressView.swift */,
 				508597ED24A605FB00717FE0 /* Helpers.swift */,
 				508E4C7724A49A4A00566122 /* Main.storyboard */,
 				508E4C7A24A49A4C00566122 /* Assets.xcassets */,
@@ -89,7 +90,6 @@
 			);
 			name = Path;
 			packageProductDependencies = (
-				508597EB24A5F4DC00717FE0 /* HGCircularSlider */,
 			);
 			productName = Path;
 			productReference = 508E4C6E24A49A4A00566122 /* Path.app */;
@@ -120,7 +120,6 @@
 			);
 			mainGroup = 508E4C6524A49A4A00566122;
 			packageReferences = (
-				508597EA24A5F4DC00717FE0 /* XCRemoteSwiftPackageReference "HGCircularSlider" */,
 			);
 			productRefGroup = 508E4C6F24A49A4A00566122 /* Products */;
 			projectDirPath = "";
@@ -152,6 +151,7 @@
 				508E4C7624A49A4A00566122 /* ViewController.swift in Sources */,
 				508E4C7224A49A4A00566122 /* AppDelegate.swift in Sources */,
 				508E4C7424A49A4A00566122 /* SceneDelegate.swift in Sources */,
+				50BD667E24A7420800E1EC88 /* CircularProgressView.swift in Sources */,
 				508597EE24A605FB00717FE0 /* Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,25 +350,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		508597EA24A5F4DC00717FE0 /* XCRemoteSwiftPackageReference "HGCircularSlider" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/HamzaGhazouani/HGCircularSlider.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.2.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		508597EB24A5F4DC00717FE0 /* HGCircularSlider */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 508597EA24A5F4DC00717FE0 /* XCRemoteSwiftPackageReference "HGCircularSlider" */;
-			productName = HGCircularSlider;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 508E4C6624A49A4A00566122 /* Project object */;
 }
