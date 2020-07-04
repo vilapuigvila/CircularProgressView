@@ -58,6 +58,12 @@ final class CircularProgressView: UIView {
     /// set end angle in degress
     lazy var endAngle: CGFloat = configuration.endAngle
 
+    private lazy var impact: UIImpactFeedbackGenerator = {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.prepare()
+        return generator
+    }()
+    
     // MARK: - unavailable -
     override private init(frame: CGRect) { fatalError() }
     required init?(coder: NSCoder) { fatalError() }
@@ -70,6 +76,7 @@ final class CircularProgressView: UIView {
         super.init(frame: frame)
         
         addPanGestureInThumb()
+        addDoubleTapGestureInThumb()
     }
     
     override func draw(_ rect: CGRect) {
@@ -108,9 +115,25 @@ final class CircularProgressView: UIView {
         thumbView.addGestureRecognizer(panGesture)
     }
     
+    private func addDoubleTapGestureInThumb() {
+        let panGesture = UITapGestureRecognizer(target: self, action: #selector(moveThumbToCenterArc))
+        panGesture.numberOfTapsRequired = 2
+        addGestureRecognizer(panGesture)
+    }
+    
+    @objc private func moveThumbToCenterArc() {
+        let thumbPosition = Rescale(from: (0, 1), to: (-225, 45)).rescaleAndClamp(initialThumbPosition)
+        thumbView.center = pointInArc(angle: thumbPosition)
+        delegate?.circularProgressView(self, thumbValue: 0.5)
+        impact.impactOccurred()
+    }
+    
     private func normalizeThumbValue(value: Double) {
         let normalize = Rescale(from: (startAngle, endAngle), to: (0, 1))
-        thumbValue = Double(normalize.rescaleAndClamp(CGFloat(value)))
+        thumbValue = Double(normalize.rescaleAndClamp(CGFloat(value))).round(places: 3)
+        if thumbValue == 0.5 {
+            impact.impactOccurred(intensity: 0.8)
+        }
     }
     
     @objc private func dragThumb(recognizer: UIPanGestureRecognizer) {
